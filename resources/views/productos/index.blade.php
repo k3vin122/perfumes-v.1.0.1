@@ -141,7 +141,7 @@
                             <td class="text-end">${{ number_format($producto->valor_venta_sur, 0, ',', '.') }}</td>
                             <td class="text-end">${{ number_format($producto->valor_venta_norte, 0, ',', '.') }}</td>
                             <td class="text-end">${{ number_format($producto->ganancia_sur, 0, ',', '.') }}</td>
-                            
+
                             <td class="text-end">${{ number_format($producto->ganancia_norte, 0, ',', '.') }}</td>
                             <td class="text-center">
                                 <span
@@ -159,9 +159,8 @@
                             <td class="text-center">
                                 @if ($producto->imagen)
                                     <div class="img-container">
-                                        <img src="{{ asset('storage/app/public/' . $producto->imagen) }}" alt="Imagen"
-                                            class="img-fluid img-thumbnail"
-                                            style="max-width: 70px; transition: transform 0.3s ease;">
+                                        <img src="{{ url('archivos/' . $producto->imagen) }}" alt="Imagen">
+                                        
                                     </div>
                                 @else
                                     <span class="text-muted fst-italic">Sin imagen</span>
