@@ -3,13 +3,13 @@
 @section('content')
     <div class="container py-5">
 
-      <!-- Encabezado con botón -->
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0 text-primary fw-bold">📦 Ventas a Crédito</h1>
-    <a href="{{ route('ventas_credito.create') }}" class="btn btn-primary">
-        <i class="bi bi-plus-circle"></i> Agregar nuevo crédito
-    </a>
-</div>
+        <!-- Encabezado con botón -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0 text-primary fw-bold">📦 Ventas a Crédito</h1>
+            <a href="{{ route('ventas_credito.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Agregar nuevo crédito
+            </a>
+        </div>
         <!-- Filtros -->
         <div class="card mb-4 shadow-sm">
             <div class="card-body">
@@ -53,61 +53,62 @@
 
         <!-- Tabla -->
         <div class="table-responsive">
-           <table class="table table-bordered table-hover shadow-sm align-middle">
-    <thead class="table-primary">
-        <tr class="text-center">
-            <th>Fecha</th>
-            <th>Cliente</th>
-            <th>Zona</th>
-            <th>Productos</th>
-            <th>Total</th>
-            <th>Pagado</th>
-            <th>Saldo Pendiente</th>
-            <th class="text-center">Opciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @forelse ($ventas as $venta)
-            <tr>
-                <td class="text-center">{{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y') }}</td>
-                <td>{{ $venta->cliente_nombre }}</td>
-                <td class="text-center">
-                    <span class="badge bg-{{ $venta->zona == 'Norte' ? 'info' : 'success' }}">
-                        {{ $venta->zona }}
-                    </span>
-                </td>
-                <td>
-                    <ul class="list-unstyled mb-0">
-                        @foreach ($venta->detalles as $detalle)
-                            <li>
-                                <span data-bs-toggle="tooltip"
-                                      data-bs-html="true"
-                                      title="<img src='{{ asset('storage/app/public/' . $detalle->producto->imagen) }}' width='120' class='rounded shadow' />">
-                                    {{ $detalle->producto->producto ?? 'Sin nombre' }} x {{ $detalle->cantidad }}
+            <table class="table table-bordered table-hover shadow-sm align-middle">
+                <thead class="table-primary">
+                    <tr class="text-center">
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Zona</th>
+                        <th>Productos</th>
+                        <th>Total</th>
+                        <th>Pagado</th>
+                        <th>Saldo Pendiente</th>
+                        <th class="text-center">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($ventas as $venta)
+                        <tr>
+                            <td class="text-center">{{ \Carbon\Carbon::parse($venta->fecha)->format('d/m/Y') }}</td>
+                            <td>{{ $venta->cliente_nombre }}</td>
+                            <td class="text-center">
+                                <span class="badge bg-{{ $venta->zona == 'Norte' ? 'info' : 'success' }}">
+                                    {{ $venta->zona }}
                                 </span>
-                            </li>
-                        @endforeach
-                    </ul>
-                </td>
-                <td class="text-end">${{ number_format($venta->total, 0, ',', '.') }}</td>
-                <td class="text-end">${{ number_format($venta->abono_inicial + $venta->pagos->sum('monto'), 0, ',', '.') }}</td>
-                <td class="text-end text-danger fw-bold">
-                    ${{ number_format($venta->total - ($venta->abono_inicial + $venta->pagos->sum('monto')), 0, ',', '.') }}
-                </td>
-                <td class="text-center">
-                    <a href="{{ route('ventas_credito.show', $venta->id) }}"
-                       class="btn btn-sm btn-outline-primary">
-                        <i class="bi bi-eye"></i> Agregar Pago
-                    </a>
-                </td>
-            </tr>
-        @empty
-            <tr>
-                <td colspan="8" class="text-center text-muted">No se encontraron ventas</td>
-            </tr>
-        @endforelse
-    </tbody>
-</table>
+                            </td>
+                            <td>
+                                <ul class="list-unstyled mb-0">
+                                    @foreach ($venta->detalles as $detalle)
+                                        <li>
+                                            <span data-bs-toggle="tooltip" data-bs-html="true"
+                                                title="<img src='{{ url('/archivos/' . $detalle->producto->imagen) }}' width='120' class='rounded shadow' />">
+                                                {{ $detalle->producto->producto ?? 'Sin nombre' }} x
+                                                {{ $detalle->cantidad }}
+                                            </span>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </td>
+                            <td class="text-end">${{ number_format($venta->total, 0, ',', '.') }}</td>
+                            <td class="text-end">
+                                ${{ number_format($venta->abono_inicial + $venta->pagos->sum('monto'), 0, ',', '.') }}</td>
+                            <td class="text-end text-danger fw-bold">
+                                ${{ number_format($venta->total - ($venta->abono_inicial + $venta->pagos->sum('monto')), 0, ',', '.') }}
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ route('ventas_credito.show', $venta->id) }}"
+                                    class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> Agregar Pago
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center text-muted">No se encontraron ventas</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
 
         </div>
 

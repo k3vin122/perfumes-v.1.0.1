@@ -1,5 +1,29 @@
 @extends('layouts.app')
 
+
+@section('styles')
+<style>
+    /* Efecto de zoom al pasar el cursor */
+.img-container {
+    position: relative;
+    overflow: hidden;
+    max-width: 150px; /* Limita el tamaño máximo del contenedor */
+}
+
+.img-container img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease-in-out; /* Suaviza el efecto */
+    max-height: 150px; /* Limita la altura máxima */
+}
+
+.img-container:hover img {
+    transform: scale(1.1); /* Agranda la imagen al pasar el cursor con un poco menos de tamaño */
+}
+
+</style>
+@endsection
+
 @section('content')
     <div class="container py-5">
 
@@ -19,36 +43,34 @@
             class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
 
             <!-- Botón de Nuevo Producto -->
-            <a href="{{ route('productos.create') }}" class="btn btn-primary btn-lg shadow-sm w-100 w-md-auto">
+            <a href="{{ route('productos.create') }}" class="btn btn-primary btn-sm shadow-sm w-100 w-md-auto">
                 <i class="bi bi-plus-circle"></i> Nuevo Producto
             </a>
             <!-- Botón de Exportación Excel -->
-            <a href="{{ route('productos.export') }}" class="btn btn-success mb-3">
-                Exportar a Excel
+            <a href="{{ route('productos.export') }}" class="btn btn-success btn-sm mb-3 mb-md-0">
+                <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
             </a>
-
 
             <!-- Botones de Exportación -->
             <div class="btn-group flex-wrap">
                 <form action="{{ route('productos.catalogo', 'Norte') }}" method="GET" target="_blank"
                     class="mb-2 mb-md-0 me-2">
                     <input type="hidden" name="sucursal" value="Rancagua">
-                    <button type="submit" class="btn btn-outline-primary shadow-sm">📄 Catálogo Norte Rancagua</button>
+                    <button type="submit" class="btn btn-outline-primary btn-sm shadow-sm">📄 Catálogo Norte
+                        Rancagua</button>
                 </form>
 
                 <form action="{{ route('productos.catalogo', 'Sur') }}" method="GET" target="_blank" class="mb-2 mb-md-0">
                     <input type="hidden" name="sucursal" value="Puerto Varas">
-                    <button type="submit" class="btn btn-outline-success shadow-sm">📄 Catálogo Sur Puerto Varas</button>
+                    <button type="submit" class="btn btn-outline-success btn-sm shadow-sm">📄 Catálogo Sur Puerto
+                        Varas</button>
                 </form>
             </div>
         </div>
 
-
-
         <!-- Filtros -->
         <form method="GET" action="{{ route('productos.index') }}"
             class="row row-cols-1 row-cols-md-auto g-3 align-items-end mb-4 shadow-sm p-3 rounded border bg-light">
-            <!-- Filtro de Ordenar por -->
             <div class="col">
                 <label for="ordenar_por" class="form-label mb-0 small">Ordenar por</label>
                 <select name="ordenar_por" id="ordenar_por" class="form-select form-select-sm">
@@ -60,7 +82,6 @@
                 </select>
             </div>
 
-            <!-- Filtro de Sucursal -->
             <div class="col">
                 <label for="sucursal" class="form-label mb-0 small">Sucursal</label>
                 <select name="sucursal" id="sucursal" class="form-select form-select-sm">
@@ -71,21 +92,18 @@
                 </select>
             </div>
 
-            <!-- Filtro de Producto -->
             <div class="col">
                 <label for="producto" class="form-label mb-0 small">Producto</label>
                 <input type="text" name="producto" id="producto" class="form-control form-control-sm"
                     value="{{ request('producto') }}">
             </div>
 
-            <!-- Filtro de Marca -->
             <div class="col">
                 <label for="marca" class="form-label mb-0 small">Marca</label>
                 <input type="text" name="marca" id="marca" class="form-control form-control-sm"
                     value="{{ request('marca') }}">
             </div>
 
-            <!-- Filtro de Género -->
             <div class="col">
                 <label for="genero" class="form-label mb-0 small">Género</label>
                 <select name="genero" id="genero" class="form-select form-select-sm">
@@ -96,14 +114,12 @@
                 </select>
             </div>
 
-            <!-- Filtro de Stock -->
             <div class="col">
                 <label for="stock" class="form-label mb-0 small">Stock &gt;=</label>
                 <input type="number" name="stock" id="stock" class="form-control form-control-sm"
                     value="{{ request('stock') }}">
             </div>
 
-            <!-- Botones de Filtrar y Limpiar -->
             <div class="col text-md-end">
                 <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-funnel"></i> Filtrar</button>
                 <a href="{{ route('productos.index') }}" class="btn btn-sm btn-outline-secondary">Limpiar</a>
@@ -141,7 +157,6 @@
                             <td class="text-end">${{ number_format($producto->valor_venta_sur, 0, ',', '.') }}</td>
                             <td class="text-end">${{ number_format($producto->valor_venta_norte, 0, ',', '.') }}</td>
                             <td class="text-end">${{ number_format($producto->ganancia_sur, 0, ',', '.') }}</td>
-
                             <td class="text-end">${{ number_format($producto->ganancia_norte, 0, ',', '.') }}</td>
                             <td class="text-center">
                                 <span
@@ -149,18 +164,15 @@
                                     {{ $producto->cantidad }}
                                 </span>
                                 @if ($producto->cantidad == 0)
-                                    <span class="text-danger fw-bold ms-1">
-                                        <i class="bi bi-exclamation-triangle-fill"></i> Sin stock
-                                    </span>
+                                    <span class="text-danger fw-bold ms-1"><i class="bi bi-exclamation-triangle-fill"></i>
+                                        Sin stock</span>
                                 @endif
                             </td>
-
                             <td class="text-center">{{ $producto->sucursal }}</td>
                             <td class="text-center">
                                 @if ($producto->imagen)
                                     <div class="img-container">
                                         <img src="{{ url('archivos/' . $producto->imagen) }}" alt="Imagen">
-                                        
                                     </div>
                                 @else
                                     <span class="text-muted fst-italic">Sin imagen</span>
@@ -184,9 +196,7 @@
             </table>
         </div>
 
-
-
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center mt-4">
             {{ $productos->links('pagination::bootstrap-5') }}
         </div>
 

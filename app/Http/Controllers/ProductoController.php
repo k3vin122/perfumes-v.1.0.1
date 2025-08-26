@@ -157,40 +157,49 @@ class ProductoController extends Controller
         return redirect()->route('productos.create')->with('success', 'Producto guardado correctamente con SKU ' . $nuevoSku);
     }
 
-
-
     public function catalogo(Request $request, $zona)
-    {
-        // Validar que la zona sea válida
-        if (!in_array($zona, ['Norte', 'Sur'])) {
-            return abort(404, 'Zona no válida.');
-        }
-
-        // Obtener la sucursal desde la solicitud (query o formulario)
-        $sucursal = $request->input('sucursal');
-
-        // Validar sucursal
-        if (!in_array($sucursal, ['Rancagua', 'Puerto Varas'])) {
-            return abort(404, 'Sucursal no válida.');
-        }
-
-        // Filtrar productos con stock > 0 y por sucursal
-        $productos = Producto::where('cantidad', '>', 0)->where('sucursal', $sucursal)->get();
-
-        // Cálculo total de la zona
-        $totalZona = $productos->sum(function ($producto) use ($zona) {
-            $precio = $zona == 'Norte' ? $producto->valor_venta_norte : $producto->valor_venta_sur;
-            return $producto->cantidad * $precio;
-        });
-
-        // Cargar el PDF
-        $pdf = Pdf::loadView('productos.catalogo', [
-            'productos' => $productos,
-            'zona' => $zona,
-            'sucursal' => $sucursal,
-            'totalZona' => $totalZona,
-        ]);
-
-        return $pdf->stream("catalogo_{$zona}_{$sucursal}.pdf");
+{
+    // Validar que la zona sea válida
+    if (!in_array($zona, ['Norte', 'Sur'])) {
+        return abort(404, 'Zona no válida.');
     }
+
+    // Obtener la sucursal desde la solicitud (query o formulario)
+    $sucursal = $request->input('sucursal');
+
+    // Validar sucursal
+    if (!in_array($sucursal, ['Rancagua', 'Puerto Varas'])) {
+        return abort(404, 'Sucursal no válida.');
+    }
+
+    // Filtrar productos con stock > 0 y por sucursal
+    $productos = Producto::where('cantidad', '>', 0)->where('sucursal', $sucursal)->get();
+
+    // Agregar la ruta absoluta de la imagen a cada producto
+    $productos->map(function ($producto) {
+        $producto->imagen_path = storage_path('app/public/' . $producto->imagen);
+        return $producto;
+    });
+
+    // Cálculo total de la zona
+    $totalZona = $productos->sum(function ($producto) use ($zona) {
+        $precio = $zona == 'Norte' ? $producto->valor_venta_norte : $producto->valor_venta_sur;
+        return $producto->cantidad * $precio;
+    });
+
+    // Cargar el PDF
+    $pdf = Pdf::loadView('productos.catalogo', [
+        'productos' => $productos,
+        'zona' => $zona,
+        'sucursal' => $sucursal,
+        'totalZona' => $totalZona,
+    ]);
+
+    return $pdf->stream("catalogo_{$zona}_{$sucursal}.pdf");
+}
+
+
+
+
+    
 }

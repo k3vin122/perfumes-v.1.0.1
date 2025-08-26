@@ -79,7 +79,7 @@
         }
 
         img {
-            width: 200px; /* Aumentar el tamaño de las imágenes */
+            width: 200px;
             height: auto;
             border-radius: 6px;
             box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
@@ -115,14 +115,33 @@
             position: absolute;
             top: 40px;
             right: 40px;
-            width: 100px; /* Ajusta el tamaño del QR */
+            width: 100px;
             height: auto;
+        }
+
+        /* SALTO DE PÁGINA PARA PDF */
+        .page-break {
+            page-break-after: always;
+        }
+
+        /* Estilo para la fecha */
+        .fecha {
+            position: fixed;
+            top: 10px;
+            right: 40px;
+            font-size: 16px;
+            color: #7f8c8d;
+            font-weight: 400;
         }
     </style>
 </head>
 
 <body>
-    <!-- Aquí se coloca la imagen QR en la parte superior derecha -->
+    <!-- Mostrar la fecha en la parte superior derecha -->
+    <div class="fecha">
+        {{ \Carbon\Carbon::now()->format('d/m/Y') }}
+    </div>
+
     @if ($zona == 'Norte')
         <img class="qr" src="{{ public_path('QR2.png') }}" alt="QR Norte">
     @elseif ($zona == 'Sur')
@@ -132,103 +151,112 @@
     <h3>Catálogo {{ $zona }} - {{ $sucursal }}</h3>
 
     <!-- Hombres -->
-    <h4>Hombres</h4>
-    <table>
-        <thead>
-            <tr>
-                <th>SKU</th>
-                <th>Imagen</th>
-                <th>Producto</th>
-                <th>Notas</th>
-                <th class="center">Precio Venta {{ $zona }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($productos->where('genero', 'Hombre') as $producto)
+    <div class="page-break">
+        <h4>Hombres</h4>
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ $producto->sku }}</td>
-                    <td class="center">
-                        @if ($producto->imagen)
-                            <img src="{{ public_path('storage/' . $producto->imagen) }}" alt="Imagen" />
-                        @else
-                            <div class="no-image">Sin imagen</div>
-                        @endif
-                    </td>
-                    <td>{{ $producto->producto }}</td>
-                    <td>{{ $producto->notas }}</td>
-                    <td class="center price">
-                        ${{ number_format($zona == 'Norte' ? $producto->valor_venta_norte : $producto->valor_venta_sur, 0, ',', '.') }}
-                    </td>
+                    <th>SKU</th>
+                    <th>Imagen</th>
+                    <th>Producto</th>
+                    <th>Notas</th>
+                    <th class="center">Precio Venta {{ $zona }}</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($productos->where('genero', 'Hombre') as $producto)
+                    <tr>
+                        <td>{{ $producto->sku }}</td>
+                        <td class="center">
+                            @if ($producto->imagen && file_exists($producto->imagen_path))
+                                <img src="{{ $producto->imagen_path }}" alt="Imagen"
+                                    style="max-width: 100px; max-height: 100px;" />
+                            @else
+                                <div class="no-image">Sin imagen</div>
+                            @endif
+                        </td>
+                        <td>{{ $producto->producto }}</td>
+                        <td>{{ $producto->notas }}</td>
+                        <td class="center price">
+                            ${{ number_format($zona == 'Norte' ? $producto->valor_venta_norte : $producto->valor_venta_sur, 0, ',', '.') }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
     <!-- Mujeres -->
-    <h4>Mujeres</h4>
-    <table>
-        <thead>
-            <tr>
-                <th>SKU</th>
-                <th>Imagen</th>
-                <th>Producto</th>
-                <th>Notas</th>
-                <th class="center">Precio Venta {{ $zona }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($productos->where('genero', 'Mujer') as $producto)
+    <div class="page-break">
+        <h4>Mujeres</h4>
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ $producto->sku }}</td>
-                    <td class="center">
-                        @if ($producto->imagen)
-                            <img src="{{ public_path('storage/' . $producto->imagen) }}" alt="Imagen" />
-                        @else
-                            <div class="no-image">Sin imagen</div>
-                        @endif
-                    </td>
-                    <td>{{ $producto->producto }}</td>
-                    <td>{{ $producto->notas }}</td>
-                    <td class="center price">
-                        ${{ number_format($zona == 'Norte' ? $producto->valor_venta_norte : $producto->valor_venta_sur, 0, ',', '.') }}
-                    </td>
+                    <th>SKU</th>
+                    <th>Imagen</th>
+                    <th>Producto</th>
+                    <th>Notas</th>
+                    <th class="center">Precio Venta {{ $zona }}</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($productos->where('genero', 'Mujer') as $producto)
+                    <tr>
+                        <td>{{ $producto->sku }}</td>
+                        <td class="center">
+                            @if ($producto->imagen && file_exists($producto->imagen_path))
+                                <img src="{{ $producto->imagen_path }}" alt="Imagen"
+                                    style="max-width: 100px; max-height: 100px;" />
+                            @else
+                                <div class="no-image">Sin imagen</div>
+                            @endif
+                        </td>
+                        <td>{{ $producto->producto }}</td>
+                        <td>{{ $producto->notas }}</td>
+                        <td class="center price">
+                            ${{ number_format($zona == 'Norte' ? $producto->valor_venta_norte : $producto->valor_venta_sur, 0, ',', '.') }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
     <!-- Unisex -->
-    <h4>Unisex</h4>
-    <table>
-        <thead>
-            <tr>
-                <th>SKU</th>
-                <th>Imagen</th>
-                <th>Producto</th>
-                <th>Notas</th>
-                <th class="center">Precio Venta {{ $zona }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($productos->where('genero', 'Unisex') as $producto)
+    <div>
+        <h4>Unisex</h4>
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ $producto->sku }}</td>
-                    <td class="center">
-                        @if ($producto->imagen)
-                            <img src="{{ public_path('storage/' . $producto->imagen) }}" alt="Imagen" />
-                        @else
-                            <div class="no-image">Sin imagen</div>
-                        @endif
-                    </td>
-                    <td>{{ $producto->producto }}</td>
-                    <td>{{ $producto->notas }}</td>
-                    <td class="center price">
-                        ${{ number_format($zona == 'Norte' ? $producto->valor_venta_norte : $producto->valor_venta_sur, 0, ',', '.') }}
-                    </td>
+                    <th>SKU</th>
+                    <th>Imagen</th>
+                    <th>Producto</th>
+                    <th>Notas</th>
+                    <th class="center">Precio Venta {{ $zona }}</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($productos->where('genero', 'Unisex') as $producto)
+                    <tr>
+                        <td>{{ $producto->sku }}</td>
+                        <td class="center">
+                            @if ($producto->imagen && file_exists($producto->imagen_path))
+                                <img src="{{ $producto->imagen_path }}" alt="Imagen"
+                                    style="max-width: 100px; max-height: 100px;" />
+                            @else
+                                <div class="no-image">Sin imagen</div>
+                            @endif
+                        </td>
+                        <td>{{ $producto->producto }}</td>
+                        <td>{{ $producto->notas }}</td>
+                        <td class="center price">
+                            ${{ number_format($zona == 'Norte' ? $producto->valor_venta_norte : $producto->valor_venta_sur, 0, ',', '.') }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 </body>
 
 </html>
