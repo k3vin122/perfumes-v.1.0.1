@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.card-header {
+    letter-spacing: 0.5px;
+}
+
+.card {
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.table th {
+    white-space: nowrap;
+}
+
+.bg-gradient {
+    background: linear-gradient(135deg, rgba(0,0,0,0.2) 0%, rgba(255,255,255,0.1) 100%);
+}
+
+
+/* Esto hará que la imagen crezca al pasar el mouse */
