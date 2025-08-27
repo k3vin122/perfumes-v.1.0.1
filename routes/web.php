@@ -49,6 +49,14 @@ Route::get('/archivos/{path}', function ($path) {
 
 
 
+
+
+Route::get('/boletas/{filename}', [CompraController::class, 'mostrarArchivo'])->name('boletas.ver');
+
+
+
+
+
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 

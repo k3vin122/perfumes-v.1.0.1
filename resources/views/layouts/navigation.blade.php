@@ -42,10 +42,7 @@
                     <a class="nav-link text-light {{ request()->routeIs('usuarios.index') ? 'active' : '' }}"
                         href="{{ route('usuarios.index') }}">Gestión de Usuarios</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-light {{ request()->routeIs('perfumes.index') ? 'active' : '' }}"
-                        href="{{ route('perfumes.index') }}">Futuros Perfumes</a>
-                </li>
+               
                 <li class="nav-item">
                     <a class="nav-link text-light {{ request()->routeIs('compras.*') ? 'active' : '' }}"
                         href="{{ route('compras.index') }}">Logistica</a>

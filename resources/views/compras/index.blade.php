@@ -52,9 +52,16 @@
                                     <td>{{ $compra->tienda }}</td>
                                     <td>
                                         @switch($compra->categoria)
-                                            @case('C') <span class="badge bg-success">Capital</span> @break
-                                            @case('G') <span class="badge bg-warning text-dark">Ganancia</span> @break
-                                            @default <span class="badge bg-secondary">Sin categoría</span>
+                                            @case('C')
+                                                <span class="badge bg-success">Capital</span>
+                                            @break
+
+                                            @case('G')
+                                                <span class="badge bg-warning text-dark">Ganancia</span>
+                                            @break
+
+                                            @default
+                                                <span class="badge bg-secondary">Sin categoría</span>
                                         @endswitch
                                     </td>
                                     <td>${{ number_format($compra->monto_comprado, 2, ',', '.') }}</td>
@@ -67,22 +74,22 @@
                                     </td>
                                     <td>
                                         @if ($compra->archivo_boleta)
-                                            <a href="{{ asset('storage/' . $compra->archivo_boleta) }}" target="_blank"
-                                               class="btn btn-sm btn-outline-secondary rounded-pill">
-                                                <i class="bi bi-file-earmark-text me-1"></i>Ver Archivo
-                                            </a>
+                                           <a href="{{ route('boletas.ver', ['filename' => basename($compra->archivo_boleta)]) }}" target="_blank"
+   class="btn btn-sm btn-outline-secondary rounded-pill">
+    <i class="bi bi-file-earmark-text me-1"></i>Ver Archivo
+</a>
                                         @else
                                             <span class="text-muted fst-italic">Sin archivo</span>
                                         @endif
                                     </td>
                                     <td class="text-center">
                                         <a href="{{ route('compras.edit', $compra->id) }}"
-                                           class="btn btn-sm btn-warning rounded-pill mb-1">
+                                            class="btn btn-sm btn-warning rounded-pill mb-1">
                                             <i class="bi bi-pencil-square"></i> Editar
                                         </a>
                                         <form action="{{ route('compras.destroy', $compra->id) }}" method="POST"
-                                              class="d-inline"
-                                              onsubmit="return confirm('¿Estás seguro de eliminar esta compra?');">
+                                            class="d-inline"
+                                            onsubmit="return confirm('¿Estás seguro de eliminar esta compra?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger rounded-pill">
@@ -91,31 +98,31 @@
                                         </form>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="12" class="text-center text-muted py-4">
-                                        <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
-                                        No hay compras registradas aún.
-                                    </td>
-                                </tr>
-                            @endforelse
+                                @empty
+                                    <tr>
+                                        <td colspan="12" class="text-center text-muted py-4">
+                                            <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                                            No hay compras registradas aún.
+                                        </td>
+                                    </tr>
+                                @endforelse
 
-                            <!-- Fila de totales -->
-                            <tr class="table-light border-top fw-bold">
-                                <td colspan="6" class="text-end text-primary">Totales generales:</td>
-                                <td class="text-success">${{ number_format($totalMontoComprado, 2, ',', '.') }}</td>
-                                <td class="text-success">${{ number_format($totalValorDespacho, 2, ',', '.') }}</td>
-                                <td class="text-success">${{ number_format($totalComprasPersonales, 2, ',', '.') }}</td>
-                                <td class="text-success">
-                                    <i class="bi bi-cash-coin me-1"></i>
-                                    <strong>${{ number_format($totalMontoNeto, 2, ',', '.') }}</strong>
-                                </td>
-                                <td colspan="2"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                <!-- Fila de totales -->
+                                <tr class="table-light border-top fw-bold">
+                                    <td colspan="6" class="text-end text-primary">Totales generales:</td>
+                                    <td class="text-success">${{ number_format($totalMontoComprado, 2, ',', '.') }}</td>
+                                    <td class="text-success">${{ number_format($totalValorDespacho, 2, ',', '.') }}</td>
+                                    <td class="text-success">${{ number_format($totalComprasPersonales, 2, ',', '.') }}</td>
+                                    <td class="text-success">
+                                        <i class="bi bi-cash-coin me-1"></i>
+                                        <strong>${{ number_format($totalMontoNeto, 2, ',', '.') }}</strong>
+                                    </td>
+                                    <td colspan="2"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-@endsection
+    @endsection
