@@ -17,10 +17,19 @@
         <div class="collapse navbar-collapse" id="navbarMain">
             <!-- Left links -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                 <li class="nav-item">
+                    <a class="nav-link text-light {{ request()->routeIs('stockCliente.index') ? 'active' : '' }}"
+                        href="{{ route('stockCliente.index') }}">Stock Cliente</a>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link text-light {{ request()->routeIs('productos.index') ? 'active' : '' }}"
                         href="{{ route('productos.index') }}">Stock</a>
                 </li>
+
+
+                
                 <li class="nav-item">
                     <a class="nav-link text-light {{ request()->routeIs('ventas_credito.index') ? 'active' : '' }}"
                         href="{{ route('ventas_credito.index') }}">Ventas Crédito</a>

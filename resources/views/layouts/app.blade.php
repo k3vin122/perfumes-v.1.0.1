@@ -24,8 +24,19 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('botella-de-perfume.png') }}" />
 
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- AdminLTE CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.18/css/AdminLTE.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.18/css/skins/skin-blue.min.css">
+
+
     <!-- Laravel Vite assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @yield('styles')
 </head>
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">

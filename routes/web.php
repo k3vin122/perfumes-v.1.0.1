@@ -15,6 +15,9 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Exports\ProductosExport;
 use Maatwebsite\Excel\Facades\Excel;
 
+use App\Http\Controllers\StockClienteController;
+
+
 use Illuminate\Support\Facades\Response;
 
 
@@ -26,6 +29,11 @@ use Illuminate\Support\Facades\Response;
 Route::get('/', function () {
     return redirect()->route('login');
 });
+
+
+
+Route::get('/stock-cliente', [StockClienteController::class, 'index'])->name('stockCliente.index');
+
 
 
 

@@ -1,27 +1,28 @@
 @extends('layouts.app')
 
-
 @section('styles')
-<style>
-    /* Efecto de zoom al pasar el cursor */
-.img-container {
-    position: relative;
-    overflow: hidden;
-    max-width: 150px; /* Limita el tamaño máximo del contenedor */
-}
+    <style>
+        .img-container {
+            position: relative;
+            overflow: hidden;
+            max-width: 100px;
+            /* Limita el tamaño máximo del contenedor */
+            max-height: 100px;
+            /* Limita la altura máxima de las imágenes */
+        }
 
-.img-container img {
-    width: 100%;
-    height: auto;
-    transition: transform 0.3s ease-in-out; /* Suaviza el efecto */
-    max-height: 150px; /* Limita la altura máxima */
-}
+        .img-container img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease-in-out;
+            /* Suaviza el efecto */
+        }
 
-.img-container:hover img {
-    transform: scale(1.1); /* Agranda la imagen al pasar el cursor con un poco menos de tamaño */
-}
-
-</style>
+        .img-container:hover img {
+            transform: scale(1.05);
+            /* Agranda la imagen al pasar el cursor, pero menos que antes */
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -41,12 +42,9 @@
         <!-- Botones y filtros -->
         <div
             class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
-
-            <!-- Botón de Nuevo Producto -->
             <a href="{{ route('productos.create') }}" class="btn btn-primary btn-sm shadow-sm w-100 w-md-auto">
                 <i class="bi bi-plus-circle"></i> Nuevo Producto
             </a>
-            <!-- Botón de Exportación Excel -->
             <a href="{{ route('productos.export') }}" class="btn btn-success btn-sm mb-3 mb-md-0">
                 <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
             </a>
@@ -128,9 +126,10 @@
 
         <!-- Tabla de Productos -->
         <div class="table-responsive-sm shadow-sm rounded">
-            <table class="table table-hover table-bordered align-middle mb-0">
-                <thead class="table-primary text-center">
-                    <tr class="text-nowrap">
+
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr class="table-active text-center text-nowrap">
                         <th>SKU</th>
                         <th>Marca</th>
                         <th>Producto</th>
@@ -149,7 +148,7 @@
                 <tbody>
                     @forelse ($productos as $producto)
                         <tr class="{{ $producto->cantidad == 0 ? 'table-danger' : '' }}">
-                            <td class="text-center fw-semibold">{{ $producto->sku }}</td>
+                            <th scope="row" class="text-center fw-semibold">{{ $producto->sku }}</th>
                             <td>{{ $producto->marca }}</td>
                             <td class="text-center producto-hover">{{ $producto->producto }}</td>
                             <td class="text-center">{{ $producto->genero }}</td>
@@ -164,29 +163,43 @@
                                     {{ $producto->cantidad }}
                                 </span>
                                 @if ($producto->cantidad == 0)
-                                    <span class="text-danger fw-bold ms-1"><i class="bi bi-exclamation-triangle-fill"></i>
-                                        Sin stock</span>
+                                    <span class="text-danger fw-bold ms-1">
+                                        <i class="bi bi-exclamation-triangle-fill"></i> Sin stock
+                                    </span>
                                 @endif
                             </td>
                             <td class="text-center">{{ $producto->sucursal }}</td>
-                            <td class="text-center">
+                            <td class="text-center table-light">
                                 @if ($producto->imagen)
-                                    <div class="img-container">
-                                        <img src="{{ url('archivos/' . $producto->imagen) }}" alt="Imagen">
+                                    <div class="img-wrapper">
+                                        <div class="img-container">
+                                            <img src="{{ url('archivos/' . $producto->imagen) }}" alt="Imagen" />
+                                        </div>
                                     </div>
                                 @else
                                     <span class="text-muted fst-italic">Sin imagen</span>
                                 @endif
                             </td>
                             <td class="text-center">
-                                <a href="{{ route('productos.edit', $producto->id) }}"
-                                    class="btn btn-sm btn-warning shadow-sm">
-                                    <i class="bi bi-pencil-square"></i> Editar
-                                </a>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Acciones
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('productos.edit', $producto->id) }}">
+                                                <i class="bi bi-pencil-square me-2"></i> Editar
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
                             </td>
+
                         </tr>
                     @empty
-                        <tr>
+                        <tr class="table-active">
                             <td colspan="13" class="text-center text-muted fst-italic py-3">
                                 No hay productos registrados.
                             </td>
@@ -194,6 +207,12 @@
                     @endforelse
                 </tbody>
             </table>
+
+
+
+
+
+
         </div>
 
         <div class="d-flex justify-content-center mt-4">

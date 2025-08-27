@@ -152,10 +152,8 @@
                                     <td>
                                         @if ($venta->producto->imagen)
                                             <img src="{{ url('archivos/' . $venta->producto->imagen) }}"
-     alt="Imagen del producto"
-     class="rounded shadow-sm"
-     style="width: 100px; height: 100px; object-fit: cover;">
-
+                                                alt="Imagen del producto" class="rounded shadow-sm"
+                                                style="width: 100px; height: 100px; object-fit: cover;">
                                         @else
                                             <span class="text-muted">Sin imagen</span>
                                         @endif
